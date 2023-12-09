@@ -1,0 +1,75 @@
+{
+    "Books": [
+    {
+      "id": "1",
+      "nombre": "C.S. Lewis: Una Vida Extraordinaria",
+      "autor": "Alister McGrath",
+      "editorial": "Tyndale House Publishers"
+    },
+    {
+      "id": "2",
+      "nombre": "Stephen King: Corazones en la Atlántida",
+      "autor": "Lisa Rogak",
+      "editorial": "Thomas Dunne Books"
+    },
+    {
+      "id": "3",
+      "nombre": "Agatha Christie: La Reina del Crimen",
+      "autor": "Laura Thompson",
+      "editorial": "Headline"
+    },
+    {
+      "id": "4",
+      "nombre": "Ernest Hemingway: Viviendo la Vida al Máximo",
+      "autor": "Mary V. Dearborn",
+      "editorial": "Knopf"
+    },
+    {
+      "id": "5",
+      "nombre": "George Orwell: Rebelión en la Granja de la Verdad",
+      "autor": "D.J. Taylor",
+      "editorial": "Random House"
+    },
+    {
+      "id": "6",
+      "nombre": "Virginia Woolf: Entre la Luz y la Sombra",
+      "autor": "Julia Briggs",
+      "editorial": "Hogarth Press"
+    },
+    {
+      "id": "7",
+      "nombre": "Haruki Murakami: El Camino del Escritor",
+      "autor": "Jay Rubin",
+      "editorial": "Bloomsbury"
+    },
+    { 
+      "id": "8",
+      "nombre": "F. Scott Fitzgerald: La Era del Jazz",
+      "autor": "Matthew J. Bruccoli",
+      "editorial": "Charles Scribner's Sons"
+    },
+    {
+      "id": "9",
+      "nombre": "Ray Bradbury: Más Allá de la Ficción",
+      "autor": "Sam Weller",
+      "editorial": "William Morrow"
+    },
+    {
+      "id": "10",
+      "nombre": "Jorge Luis Borges: Laberintos de la Imaginación",
+      "autor": "Jason Wilson",
+      "editorial": "Bloomsbury"
+    },
+    {
+      "id": "11",
+      "nombre": "H.P. Lovecraft: En las Sombras del Horror",
+      "autor": "S.T. Joshi",
+      "editorial": "Necronomicon Press"
+    },
+    {
+      "id": "12",
+      "nombre": "Isaac Asimov: Una Mente Interplanetaria",
+      "autor": "Michael White",
+      "editorial": "Arcade Publishing"
+    }
+    ]}
