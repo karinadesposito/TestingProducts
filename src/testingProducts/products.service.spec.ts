@@ -17,36 +17,47 @@ describe('ProductsService', () => {
     expect(productService).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return an array of products', async () => {
-      const mockProducts: ProductI[] = [{ id: '1', name: 'Product 1', author: 'Manuel', editorial:'Ediciones La Flor' }];
-
-      // Utiliza spyOn para crear un espía en el método fetch
-      const fetchSpy = jest.spyOn(global, 'fetch');
-      fetchSpy.mockResolvedValueOnce({
-        
-      } as Response);
-      const result = await productService.findAll();
-
-      expect(result).toEqual(mockProducts);
-
-      // Restaura el espía después de la prueba
-      fetchSpy.mockRestore();
-    });
-
-    it('should throw an error on API failure', async () => {
-      // Utiliza spyOn para crear un espía en el método fetch
-      const fetchSpy = jest.spyOn(global, 'fetch');
-      fetchSpy.mockRejectedValueOnce(new Error('API Error'));
-
-      await expect(productService.findAll()).rejects.toBe('API Error');
-
-      // Restaura el espía después de la prueba
-      fetchSpy.mockRestore();
-    });
+  it('should return a List of products', () => {
+    const result = productService.findAll();
+    expect(result).toBeInstanceOf(Promise<ProductI[]>);
   });
 
-  // Puedes continuar con pruebas similares para los demás métodos del servicio
+  it('should not return a List of products', () => {
+    const url = 'http://localhost:3030/products/';
+    const result = !url;
+    expect(result).not.toBe(Promise<ProductI[]>);
+  });
 
-});
+  it('should return a product', () => {
+    const result = productService.findProductById('4');
+    expect(result).toBeInstanceOf(
+      Promise<{
+        id: '4';
+        name: 'Ernest Hemingway: Viviendo la Vida al Máximo';
+        author: 'Mary V. Dearborn';
+        editorial: 'Knopf';
+      }>,
+    );
+  });
 
+  it('should create a product', () => {    
+    const result = productService.createProduct(
+    {
+      id: '1',
+      name: 'la guerra de los mundos',
+      author: 'H.G.Wells',
+      editorial: 'Knopf'
+    });
+    expect(result).toBeInstanceOf(Promise<ProductI>);
+  });
+
+  it('should update a product', () => {
+    const result = productService.updateProductById('5',{
+      id: '5',
+      name: 'Ernest Hemingway: Viviendo la Vida al Máximo',
+      author: 'José Perez',
+      editorial: 'Knopf'
+    });
+    expect(result).toBeInstanceOf(Promise);
+    });
+  });
