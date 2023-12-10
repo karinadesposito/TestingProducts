@@ -14,27 +14,20 @@ export class ProductsService {
     }
   }
   async findProductById(id: string): Promise<ProductI> {
-    try{
-    const res = await fetch(url + id);
-    if (res.status === 404) {
-      throw new Error();
+    try {
+      const res = await fetch(url + id);
+      if (res.status === 404) {
+        throw new Error();
+      }
+      const data = await res.json();
+      return await data;
+    } catch (error) {
+      throw error;
     }
-    return await res.json();
-  }catch (error) {
-    throw error;
   }
-  } 
-  // private async prodId(): Promise<number> {
-  //   try {
-  //     const id = '';
-  //     return id;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 
   async createProduct(products: ProductI) {
-    try {    
+    try {
       const newProduct = { ...products };
       await fetch(url, {
         method: 'POST',
@@ -43,7 +36,7 @@ export class ProductsService {
         },
         body: JSON.stringify(newProduct),
       });
-    
+
       return newProduct;
     } catch (error) {
       throw error;
@@ -52,7 +45,7 @@ export class ProductsService {
 
   async updateProductById(id: string, body: ProductI): Promise<ProductDto> {
     try {
-       await this.findProductById(id);
+      await this.findProductById(id);
       const upProduct = { ...body, id };
       await fetch(url + id, {
         method: 'Put',
@@ -61,7 +54,7 @@ export class ProductsService {
         },
         body: JSON.stringify(upProduct),
       });
-      
+
       return upProduct;
     } catch (error) {
       throw error;
@@ -75,7 +68,7 @@ export class ProductsService {
     if (!res.ok) {
       throw new Error();
     }
-   
+
     return await res.json();
   }
 }

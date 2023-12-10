@@ -24,14 +24,12 @@ export class ProductsController {
   @Get()
   async findAll(@Res() res: Response): Promise<Response<ProductI[]>> {
     try {
-      const patResp = await this.productsService.findAll();
-      return res
-        .status(HttpStatus.OK)
-        .send({
-          message: 'The Books list',
-          patResp,
-          statusCode: HttpStatus.OK,
-        });
+      const prodResp = await this.productsService.findAll();
+      return res.status(HttpStatus.OK).send({
+        message: 'The Books list',
+        prodResp,
+        statusCode: HttpStatus.OK,
+      });
     } catch (error) {
       throw new NotFoundException('Data not found');
     }
@@ -42,9 +40,14 @@ export class ProductsController {
     @Param('id') id: string,
   ): Promise<Response<ProductI>> {
     try {
-      const dataProductt = await this.productsService.findProductById(id);
-      return res.status(HttpStatus.OK).send({ message: 'Product found', dataProductt, statusCode: HttpStatus.OK });
-
+      const dataProduct = await this.productsService.findProductById(id);
+      return res
+        .status(HttpStatus.OK)
+        .send({
+          message: 'Product found',
+          dataProduct,
+          statusCode: HttpStatus.OK,
+        });
     } catch (error) {
       throw new NotFoundException(`Product with'${id}' does not exists`);
     }
@@ -58,7 +61,13 @@ export class ProductsController {
   ): Promise<Response<ProductDto>> {
     try {
       const newProduct = await this.productsService.createProduct(body);
-      return res.status(HttpStatus.CREATED).json({ message: `The product was created `, newProduct, statusCode: HttpStatus.CREATED });
+      return res
+        .status(HttpStatus.CREATED)
+        .json({
+          message: `The product was created `,
+          newProduct,
+          statusCode: HttpStatus.CREATED,
+        });
     } catch (error) {
       throw new BadRequestException('Product was not created');
     }
@@ -73,7 +82,12 @@ export class ProductsController {
     try {
       const deleteProd = await this.productsService.deleteProductById(id);
       if (deleteProd) {
-        return res.status(HttpStatus.OK).send({ message: `The product with id ${id} was deleted` , statusCode: HttpStatus.OK });
+        return res
+          .status(HttpStatus.OK)
+          .send({
+            message: `The product with id ${id} was deleted`,
+            statusCode: HttpStatus.OK,
+          });
       }
     } catch (error) {
       throw new NotFoundException('Deleted Failed');
@@ -92,10 +106,15 @@ export class ProductsController {
         id,
         body,
       );
-        return res.status(HttpStatus.OK).json(({ message: `The product was updated `, updatedProduct, statusCode: HttpStatus.OK }));
-
+      return res
+        .status(HttpStatus.OK)
+        .json({
+          message: `The product was updated `,
+          updatedProduct,
+          statusCode: HttpStatus.OK,
+        });
     } catch (error) {
       throw new BadRequestException(`Product with'${id}' was not updated`);
     }
   }
-} 
+}
