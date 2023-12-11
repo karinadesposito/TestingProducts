@@ -40,7 +40,7 @@ describe('ProductsService', () => {
     );
   });
 
-  it('should create a product', () => {    
+  it('should create a new product', () => {    
     const result = productService.createProduct(
     {
       id: '1',
