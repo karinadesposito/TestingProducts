@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductsService } from './products.service';
-import { ProductI } from './products.interface';
+// import { ProductI } from './products.interface';
+
+global.fetch = jest.fn();
 
 describe('ProductsService', () => {
   let productService: ProductsService;
@@ -13,51 +15,66 @@ describe('ProductsService', () => {
     productService = module.get<ProductsService>(ProductsService);
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('should be defined', () => {
     expect(productService).toBeDefined();
   });
 
-  it('should return a List of products', () => {
-    const result = productService.findAll();
-    expect(result).toBeInstanceOf(Promise<ProductI[]>);
-  });
-
-  it('should not return a List of products', () => {
-    const url = 'http://localhost:3030/products/';
-    const result = !url;
-    expect(result).not.toBe(Promise<ProductI[]>);
-  });
-
-  it('should return a product', () => {
-    const result = productService.findProductById('4');
-    expect(result).toBeInstanceOf(
-      Promise<{
-        id: '4';
-        name: 'Ernest Hemingway: Viviendo la Vida al Máximo';
-        author: 'Mary V. Dearborn';
-        editorial: 'Knopf';
-      }>,
-    );
-  });
-
-  it('should create a new product', () => {    
-    const result = productService.createProduct(
-    {
-      id: '1',
-      name: 'la guerra de los mundos',
-      author: 'H.G.Wells',
-      editorial: 'Knopf'
+  it('findAll should fetch products', async () => {
+    // Configurar el mock de fetch
+    (fetch as jest.Mock).mockResolvedValue({
+      json: jest.fn().mockResolvedValue([{ id: '1', name: 'Product 1' }]),
     });
-    expect(result).toBeInstanceOf(Promise<ProductI>);
+
+    const result = await productService.findAll();
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:3030/products/');
+    expect(result).toEqual([{ id: '1', name: 'Product 1' }]);
   });
 
-  it('should update a product', () => {
-    const result = productService.updateProductById('5',{
-      id: '5',
+  it('findProductById should fetch product by id', async () => {
+    (fetch as jest.Mock).mockResolvedValue({
+      status: 200,
+      json: jest.fn().mockResolvedValue({ id: '1', name: 'Product 1' }),
+    });
+
+    const result = await productService.findProductById('1');
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:3030/products/1');
+    expect(result).toEqual({ id: '1', name: 'Product 1' });
+  });
+
+  it('createProduct should create a new product', async () => {
+    // Configurar el mock de fetch
+    (fetch as jest.Mock).mockResolvedValue({
+      status: 201, // 201 Created
+      json: jest.fn().mockResolvedValue({
+        id: '4',
+        name: 'Ernest Hemingway: Viviendo la Vida al Máximo',
+        author: 'Mary V. Dearborn',
+        editorial: 'Knopf',
+      }),
+    });
+
+    const newProductData = {
+      id: '4',
       name: 'Ernest Hemingway: Viviendo la Vida al Máximo',
-      author: 'José Perez',
-      editorial: 'Knopf'
+      author: 'Mary V. Dearborn',
+      editorial: 'Knopf',
+    };
+    const result = await productService.createProduct({});
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:3030/products/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newProductData),
     });
-    expect(result).toBeInstanceOf(Promise);
-    });
+
+    expect(result).toEqual(newProductData);
   });
+});
