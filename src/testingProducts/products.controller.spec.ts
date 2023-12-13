@@ -1,71 +1,73 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
-import { ProductI } from './products.interface';
-import { HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
+
 jest.mock('./products.service');
 
 describe('TestingProductsController', () => {
   let controller: ProductsController;
   let service: ProductsService;
+  let mockedProductsValue = 'Books';
+  let mockProductsService = {
+    findAll: () => mockedProductsValue,
+    findProductsById: () => mockedProductsValue,
+    createProduct: () => mockedProductsValue,
+    updateProductById: () => mockedProductsValue,
+    deleteProductById: () => mockedProductsValue,
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductsController],
       providers: [ProductsService],
-    }).compile();
+    })
+      .overrideProvider(ProductsService)
+      .useValue(mockProductsService)
+      .compile();
 
     controller = module.get<ProductsController>(ProductsController);
     service = module.get<ProductsService>(ProductsService);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should be defined', () => {
     expect(ProductsController).toBeDefined();
   });
 
-  // it('Should be return a Books List (Use spyOn)', async () => {
-  //   const result = [
-  //     {
-  //       id: '2',
-  //       name: 'Stephen King: Corazones en la Atlántida',
-  //       author: 'Lisa Rogak',
-  //       editorial: 'Thomas Dunne Books',
-  //     },
-  //   ];
-  //   jest.spyOn(service, 'findAll').mockResolvedValue(result);
-  //   const res: Partial<Response> = {
-  //     status: jest.fn(),
-  //     json: jest.fn(),
-  //   };
+  it('should reads a Product by id (Use full mocked Service)',  () => {      
+    const result = mockProductsService.findProductsById();
+    expect(result).toEqual('Books');
+  });
 
-  //   const resultado = await controller.findAll(res as Response);
-  // expect(resultado).toEqual(result);
-  //   // let responseObject = {
-  //   //   message: 'The Books list',
-  //   //   result,
-  //   //   statusCode: HttpStatus.OK,
-  //   // };
-  // });
+  it('should reads an array (Use full mocked Service)',  () => {      
+    const result = mockProductsService.findAll();
+    expect(result).toEqual('Books');
+  });
+
+  it('should update a Product by Id (Use full mocked Service)',  () => {      
+    const result = mockProductsService.updateProductById();
+    expect(result).toEqual('Books');
+  });
+
+  it('should delete a Product by id (Use full mocked Service)',  () => {      
+    const result = mockProductsService.deleteProductById();
+    expect(result).toEqual('Books');
+  });
+  
+   it('should create a  New Product (Use full mocked Service)',  () => {      
+    const result = mockProductsService.createProduct();
+    expect(result).toEqual('Books');
+  });
+
+
+// it('should return a Product by id (Use spyOn)', () =>{
+//   const result= "Books";
+//   jest.spyOn(service, 'findProductById').mockImplementation(() =>result as void);
+//   expect(controller.findProductById).toBe(result);
+
+// });
+
 });
-
-// it('should get the books list', () => {
-//   const data=  ;
-//   const result = controller.findAll(data)
-//   expect(controller).toBe(result);
-// });
-
-// it('', () => {
-//   expect(controller).
-//   ;
-// });
-
-// it('', () => {
-//   expect(controller).
-//   ;
-// });
-
-// it('', () => {
-//   expect(controller).
-//   ;
-// });

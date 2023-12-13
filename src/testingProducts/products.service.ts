@@ -43,32 +43,31 @@ export class ProductsService {
     }
   }
 
-  async updateProductById(id: string, body: ProductI): Promise<ProductDto> {
-    try {
-      await this.findProductById(id);
-      const upProduct = { ...body, id };
-      await fetch(url + id, {
-        method: 'Put',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(upProduct),
-      });
-
-      return upProduct;
-    } catch (error) {
-      throw error;
+  async updateProductById(id: string, product: ProductI): Promise<ProductI> {
+    const res = await fetch(url + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    });
+    if (!res.ok) {
+      throw new Error('Error updating product');
     }
+    return await res.json();
   }
-
-  async deleteProductById(id: string): Promise<ProductI> {
+  async deleteProductById(id: string): Promise<ProductI | undefined> {
     const res = await fetch(url + id, {
       method: 'DELETE',
     });
     if (!res.ok) {
-      throw new Error();
+      if (res.status === 404) {
+        throw new Error('Product not found');
+      } else {
+        throw new Error('Error deleting product');
+      }
     }
-
-    return await res.json();
+   
+     return res.status === 204 ? undefined : await res.json();
   }
 }
